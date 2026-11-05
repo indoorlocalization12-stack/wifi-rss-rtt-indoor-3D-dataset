@@ -1,0 +1,5 @@
+timestamp,landmark,apId,distance_mm,stddev_mm,rssi_dbm,success_frames,attempt_frames,type
+1783362703437,rp380,AP_0818,-1,-1,-90,0,0,RSS_PRE_RTT
+1783362703437,rp380,AP_0818,-1,-1,-100,0,0,RTT_FAILED
+1783362706430,rp380,AP_0818,-1,-1,-90,0,0,RSS_PRE_RTT
+1783362706430,rp380,AP_0818,-1,-1,-100,0,0,RTT_FAILED
