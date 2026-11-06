@@ -1,22 +1,22 @@
 # Data dictionary
 
-The dataset contains three CSV schemas. Fields below describe their apparent meaning based on the observed headers and sample values; details of application implementation have not been independently verified.
+The dataset contains RSS measurements, RTT application measurements, training reference-point floor mappings, and test-point floor mappings. The tables describe the CSV fields and their meanings. RSS and RTT measurements use separate application schemas and logging conventions.
 
 ## RSS-only measurements (customized WiFiAnalyzer)
 
 | Column | Meaning |
 | --- | --- |
-| `Time Stamp` | Timestamp as recorded by the RSS application; representation and timezone should be verified against the app |
+| `Time Stamp` | Timestamp recorded by the RSS application |
 | `apId` | Consistently pseudonymized WiFi access point identifier (`AP_####`) |
-| `Strength` | Received signal strength, generally expressed in dBm; confirm app configuration |
-| `Primary Frequency` | WiFi primary channel frequency, generally in MHz; confirm app configuration |
+| `Strength` | Received signal strength in dBm |
+| `Primary Frequency` | WiFi primary channel frequency in MHz |
 
 ## RTT application measurements (custom native Android app)
 
 | Column | Meaning |
 | --- | --- |
-| `timestamp` | App-recorded timestamp; samples resemble Unix epoch milliseconds, but confirm implementation |
-| `landmark` | App-recorded reference/test-point label; compare with filename where applicable |
+| `timestamp` | Timestamp recorded by the RTT application |
+| `landmark` | Reference-point or test-point label recorded by the RTT application |
 | `apId` | Consistently pseudonymized WiFi access point identifier (`AP_####`) |
 | `distance_mm` | Ranging-derived distance estimate in millimeters; `-1` observed for unavailable/failed ranging |
 | `stddev_mm` | App-reported ranging distance standard deviation in millimeters; `-1` observed when unavailable |
@@ -27,20 +27,39 @@ The dataset contains three CSV schemas. Fields below describe their apparent mea
 
 Do not treat every RTT-app row as a successful RTT measurement. Check `type`, distance validity, and frame counts before analysis.
 
-## Training reference-point coordinates
+## Training reference-point floor mappings
+
+Files: `floor3_floor_mapping.csv`, `floor4_floor_mapping.csv`, `floor5_floor_mapping.csv`.
 
 | Column | Meaning |
 | --- | --- |
-| `RP_ID` | Reference-point identifier, such as `RP_301` |
-| `x_floor` | Local horizontal coordinate in feet |
-| `y_floor` | Local vertical coordinate in feet |
+| `RP_ID` | Training reference-point identifier, e.g., `RP_301` |
+| `floor` | Integer floor label (3, 4, or 5, corresponding to the file) |
 
-The coordinates refer to training reference points only. Test-point ground-truth coordinates are not included.
+| File | Data records |
+| --- | ---: |
+| `floor3_floor_mapping.csv` | 87 |
+| `floor4_floor_mapping.csv` | 105 |
+| `floor5_floor_mapping.csv` | 105 |
+
+
+## Test-point floor mappings
+
+Files: `floor3_test_floor_mapping.csv`, `floor4_test_floor_mapping.csv`, `floor5_test_floor_mapping.csv`.
+
+| Column | Meaning |
+| --- | --- |
+| `rp_id` | Test-point identifier; note the lowercase column name |
+| `floor` | Integer floor label (3, 4, or 5, corresponding to the file) |
+
+| File | Data records |
+| --- | ---: |
+| `floor3_test_floor_mapping.csv` | 21 |
+| `floor4_test_floor_mapping.csv` | 21 |
+| `floor5_test_floor_mapping.csv` | 21 |
+
 
 ## Notes on matching
 
-Training measurement filenames identify reference points; capitalization and separators differ between the RSS and RTT application outputs (for example, `RP_301` versus `rp301`). Test measurement filenames and RTT `landmark` values also use different conventions. Normalize carefully rather than assuming raw strings match.
+Training measurement filenames identify reference points; capitalization and separators differ between RSS and RTT application outputs (for example, `RP_301` versus `rp301`). Test measurement filenames and RTT `landmark` values may also use different conventions. Training mapping files use `RP_ID`, while test mapping files use `rp_id`. Normalize identifiers before joining records across files; raw strings are not necessarily interchangeable.
 
-## Known exclusions
-
-The prepared release excludes one Floor 3 RTT training file with no corresponding reference-point coordinate and 18 zero-row RTT test files. Original files should be retained privately for provenance.
