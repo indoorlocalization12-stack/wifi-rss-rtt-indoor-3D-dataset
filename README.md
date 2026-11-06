@@ -10,7 +10,6 @@ RSS-only observations were recorded with a customized version of WiFiAnalyzer. R
 
 ## Contents
 
-The prepared release has 696 CSV files: 292 training RSS files, 297 training RTT files, 104 nonempty test measurement files (61 RSS and 43 RTT), and three training coordinate files.
 
 | Folder or file | Contents |
 | --- | --- |
@@ -23,25 +22,22 @@ The prepared release has 696 CSV files: 292 training RSS files, 297 training RTT
 | `test_points_floor_3_RSS_RTT/` | Floor 3 test observations (25 files) |
 | `test_points_floor_4_RSS_RTT/` | Floor 4 test observations (37 files) |
 | `test_points_floor_5_RSS_RTT/` | Floor 5 test observations (42 files) |
-| `floor3_coordinates.csv` | Floor 3 training reference points (87) |
-| `floor4_coordinates.csv` | Floor 4 training reference points (105) |
-| `floor5_coordinates.csv` | Floor 5 training reference points (105) |
+| `floor3_floor_mapping.csv` | Floor 3 training RP identifiers and floor labels (87 records) |
+| `floor4_floor_mapping.csv` | Floor 4 training RP identifiers and floor labels (105 records) |
+| `floor5_floor_mapping.csv` | Floor 5 training RP identifiers and floor labels (105 records) |
+| `floor3_test_floor_mapping.csv` | Floor 3 test identifiers and floor labels (21 records) |
+| `floor4_test_floor_mapping.csv` | Floor 4 test identifiers and floor labels (21 records) |
+| `floor5_test_floor_mapping.csv` | Floor 5 test identifiers and floor labels (21 records) |
 
-## Coordinate convention
+## Floor-mapping convention
 
-Training reference-point coordinates (`x_floor`, `y_floor`) are local, two-dimensional coordinates in feet, obtained from a scaled floor-plan representation using its bottom-left corner as the origin. They are **not** geographic coordinates. Coordinates for independent test points are not included.
+The six floor-mapping files associate a location identifier with a floor number (3, 4, or 5). Training files use the columns `RP_ID,floor`; test files use `rp_id,floor`. Identifier capitalization and naming conventions vary, so joins should be checked carefully.
+
 
 ## Anonymization
 
-WiFi BSSIDs have been consistently pseudonymized as `AP_0001`, `AP_0002`, etc., across the released files. SSIDs and AP coordinate columns were removed. Timestamps and application-specific fields are retained. Pseudonymization does not guarantee complete anonymity: release should follow a final review of filenames, metadata, timestamp privacy, and publication permissions.
+WiFi BSSIDs have been consistently pseudonymized as `AP_0001`, `AP_0002`, etc., across the previously documented release. SSIDs and AP coordinate columns were removed. Timestamps and application-specific fields are retained. Pseudonymization does not guarantee complete anonymity: release should follow a final review of filenames, metadata, timestamp privacy, and publication permissions.
 
-## Limitations
-
-- The public release does not include test-point ground-truth coordinates, so the reported localization errors cannot be independently recalculated using this release alone.
-- RSS and RTT collection methods differ, and rows should not be assumed to correspond one-to-one.
-- Some RTT test locations have no recorded observations; empty CSV files were excluded from this prepared release.
-- One unmatched Floor 3 training RTT file (`rp312`) was excluded because no matching training coordinate was available.
-- Failed RTT attempts and RSS-only records may occur in RTT application logs.
 
 See [data_dictionary.md](data_dictionary.md) for column definitions.
 
